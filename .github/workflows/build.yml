@@ -354,12 +354,12 @@ jobs:
           name: ECHWorkers-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.artifact_suffix }}
           path: ECHWorkers-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.artifact_suffix }}${{ matrix.archive_ext }}
           retention-days: 30
-
+          
   release:
     needs: build
     runs-on: ubuntu-latest
-    
-    
+    permissions:
+      contents: write
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -369,10 +369,12 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: nightly
+          name: Nightly Build
           files: |
             artifacts/**/*.zip
             artifacts/**/*.tar.gz
           draft: false
-          prerelease: false
+          prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

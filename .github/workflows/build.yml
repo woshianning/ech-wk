@@ -6,7 +6,7 @@ on:
       - main
       - master
     tags:
-      - 'v*'
+      - 'nightly'
   pull_request:
     branches:
       - main
@@ -367,18 +367,14 @@ jobs:
           path: artifacts
 
       - name: Create release
-        uses: ncipollo/release-action@v1.14.0
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: nightly
           name: Nightly Build
-          body: |
-            This is an automated nightly build.
-            Built from commit ${{ github.sha }}.
-          artifacts: |
+          files: |
             artifacts/**/*.zip
             artifacts/**/*.tar.gz
-          allowUpdates: true
-          replacesArtifacts: true
           draft: false
           prerelease: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

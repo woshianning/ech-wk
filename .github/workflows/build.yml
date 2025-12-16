@@ -367,14 +367,18 @@ jobs:
           path: artifacts
 
       - name: Create release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1.14.0
         with:
           tag_name: nightly
           name: Nightly Build
-          files: |
+          body: |
+            This is an automated nightly build.
+            Built from commit ${{ github.sha }}.
+          artifacts: |
             artifacts/**/*.zip
             artifacts/**/*.tar.gz
+          allowUpdates: true
+          replacesArtifacts: true
           draft: false
           prerelease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}

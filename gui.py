@@ -114,12 +114,11 @@ class ConfigManager:
     def __init__(self):
         # 跨平台配置文件路径
         if sys.platform == 'win32':
-            # Windows: %APPDATA%\ECHWorkersClient
-            self.config_dir = Path(os.getenv('APPDATA', Path.home())) / "ECHWorkersClient"
+            self.config_dir =get_app_dir() / "ECHWorkersClient"
         else:
-            # macOS/Linux: ~/Library/Application Support/ECHWorkersClient 或 ~/.config/ECHWorkersClient
+            # macOS/Linux: ~/ECHWorkersClient 或 ~/.config/ECHWorkersClient
             if sys.platform == 'darwin':
-                self.config_dir = Path.home() / "Library" / "Application Support" / "ECHWorkersClient"
+                self.config_dir = Path.home() /  "ECHWorkersClient"
             else:
                 self.config_dir = Path.home() / ".config" / "ECHWorkersClient"
         

@@ -95,7 +95,7 @@ jobs:
             enable_gui: true
             cgo_enabled: "0"
 
-          - os: openwrt-mt7621
+          - os: ubuntu-latest
             goos: linux
             goarch: mipsle
             gomips: softfloat

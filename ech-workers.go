@@ -62,13 +62,13 @@ type ipRangeV6 struct {
 }
 
 func init() {
-	flag.StringVar(&listenAddr, "client_ip", "127.0.0.1:30000", "代理监听地址 (支持 SOCKS5 和 HTTP)")
-	flag.StringVar(&serverAddr, "cf_domain", "", "服务端地址 (格式: x.x.workers.dev:443)")
+	flag.StringVar(&listenAddr, "l", "127.0.0.1:30000", "代理监听地址 (支持 SOCKS5 和 HTTP)")
+	flag.StringVar(&serverAddr, "f", "", "服务端地址 (格式: x.x.workers.dev:443)")
 	flag.StringVar(&serverIP, "ip", "", "指定服务端 IP（绕过 DNS 解析）")
 	flag.StringVar(&token, "token", "", "身份验证令牌")
 	flag.StringVar(&dnsServer, "dns", "doh.umbrella.com/dns-query", "ECH 查询 DoH 服务器")
 	flag.StringVar(&echDomain, "ech", "cloudflare-ech.com", "ECH 查询域名")
-	flag.StringVar(&routingMode, "cnrule", "y", "分流模式: y(全局代理), n(跳过中国大陆), none(不改变代理)")
+	flag.StringVar(&routingMode, "routing", "global", "分流模式: global(全局代理), bypass_cn(跳过中国大陆), none(不改变代理)")
 }
 
 func main() {
@@ -84,7 +84,7 @@ func main() {
 	}
 
 	// 加载中国IP列表（如果需要）
-	if routingMode == "n" {
+	if routingMode == "bypass_cn" {
 		log.Printf("[启动] 分流模式: 跳过中国大陆，正在加载中国IP列表...")
 		ipv4Count := 0
 		ipv6Count := 0
@@ -110,7 +110,7 @@ func main() {
 		} else {
 			log.Printf("[警告] 未加载到任何中国IP列表，将使用默认规则")
 		}
-	} else if routingMode == "y" {
+	} else if routingMode == "global" {
 		log.Printf("[启动] 分流模式: 全局代理")
 	} else if routingMode == "none" {
 		log.Printf("[启动] 分流模式: 不改变代理（直连模式）")
